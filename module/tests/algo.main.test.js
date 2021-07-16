@@ -6,7 +6,7 @@ const canvas = document.querySelector("#simulate");
 const ctx = canvas.getContext("2d");
 canvas.height = 500;
 canvas.width = 700;
-const appState = new State();
+const appState = new State(canvas.height, canvas.width);
 const algo = new ACO(appState);
 
 let points = [

@@ -2,7 +2,9 @@ class State {
 	#selectedPoints;
 	#finalPath;
 	ants;
-	constructor() {
+	constructor(height, width) {
+		this.canvasHeight = height;
+		this.canvaWidth = width;
 		this.selectedPoints = new Array();
 		this.ants = new Array();
 		this.animationPlaying = false;
