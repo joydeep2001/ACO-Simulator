@@ -3,15 +3,14 @@ class EventHandler {
 	animationPlaying;
 	constructor(appState) {
 		this.appState = appState;
-		this.drawing = new DrawingTools(appState);
 	}
 	handleClick = (e) => {
 		const point = {x : e.offsetX, y : e.offsetY};
 		this.appState.addNewCity(point);
 		this.appState.addNewAnt();
-		this.drawing.drawPoint();
+		DrawingTools.drawCircle(point, 10);
 		if(this.appState.getPointCount() > 1) 
-			this.drawing.drawGraph();
+			DrawingTools.drawGraph(this.appState.points);
 	}
 	handlePlay = () => {
 		if(this.animationPlaying) {
