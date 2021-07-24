@@ -13,7 +13,7 @@ class DrawingTools {
 	static drawCircle = (center, radius) => {
 		this.ctx.beginPath();
 		this.ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
-		this.ctx.fill();
+		this.ctx.stroke();
 	}
 	static drawGraph = (allPoints) => {
 		let lastIdx = allPoints.length - 1;
@@ -22,6 +22,16 @@ class DrawingTools {
 				this.drawLine(point, allPoints[lastIdx]);
 		});
 	}
+	static drawImage = (point) => {
+		console.log(`image added on ${point.x} , ${point.y}`);
+		const image = new Image();
+		image.src = '../images/ant2.png';
+		console.log(image);
+		image.onload = () => {
+			this.ctx.drawImage(image, point.x - 25, point.y - 25, 50, 50);
+		}
+		
+	} 
 }
 
 export default DrawingTools;
