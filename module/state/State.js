@@ -1,6 +1,7 @@
+import Ant from "./Ant.js";
 class State {
 	points;
-	#finalPath;
+	finalPath;
 	ants;
 	constructor(height, width) {
 		this.canvasHeight = height;
@@ -14,18 +15,14 @@ class State {
 		this.points.push(point);
 		console.log('new city added', this.points);
 	}
-	addNewAnt = () => {
-		this.ants.push({
-			sequence : new Array()
-		});
+	addNewAnt = (currentPos) => {
+		this.ants.push(new Ant(currentPos, this.points));
 		console.log('new ant added');
 	}
 	getPointCount = () => {
 		return this.points.length;
 	}
 	
-	renderState = () => {
 
-	}
 }
 export default State;
