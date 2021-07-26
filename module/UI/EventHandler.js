@@ -13,7 +13,8 @@ class EventHandler {
 		this.appState.addNewCity(point);
 		this.appState.addNewAnt(point);
 		DrawingTools.drawCircle(point, 30);
-		DrawingTools.drawImage(point);
+		//DrawingTools.drawImage(point);
+		DrawingTools.drawFilledCircle(point, 20)
 		if (this.appState.getPointCount() > 1)
 			DrawingTools.drawGraph(this.appState.points);
 	};

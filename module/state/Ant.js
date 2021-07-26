@@ -10,6 +10,7 @@ class Ant {
 		if(this.curSeqInd >= this.sequence.length)
 			return null;
 		let pointIndex = this.sequence[this.curSeqInd];
+		this.curSeqInd++;
 		return this.points[pointIndex];
 		
 	}
