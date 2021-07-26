@@ -13,7 +13,7 @@ class Animation {
 			return;
 		}
 		this.trackerArr = new Array(this.appState.ants.length).fill(
-			{status: true, id: 0}
+			Promise.resolve(0)
 		);
 		console.log("tracker arrat", this.trackerArr);
 		this.playing = true;
@@ -31,10 +31,8 @@ class Animation {
 	controller = () => {
 		let count = 0;
 		this.trackerArr.forEach((tracker, index) => {
-			console.log("tracker status", tracker.status);
-			console.log("index", index);
-			if (tracker.status) {
-				clearInterval(tracker.id);
+			tracker.then(() => {
+				clearInterval(tracker);
 				let ant = this.appState.ants[index];
 				let currentPos = ant.currentPos;
 				let destination = ant.destination();
@@ -42,33 +40,34 @@ class Animation {
 					console.log("null");
 					count++;
 				} else {
-					
-					this.move(
+					this.trackerArr[index] = this.move(
 						currentPos,
 						destination,
-						index
+						ant
 					);
-					this.trackerArr[index].status = false;
 					console.log("not null");
 				}
-			}
+			});
 		});
-
 		if (count >= this.appState.ants.length) this.traversalComplete = true;
 		else console.log("count", count);
 	};
-	move = (currentPos, destination, index) => {
-		console.log("move invoked")
-		let dDAUtils = Utils.DDA(currentPos, destination);
-		this.trackerArr[index].id = setInterval(() => {
-			console.log("index", index);
-			console.log("tracker id", this.trackerArr[index].id);
-			this.takeStep(currentPos, destination, dDAUtils, this.trackerArr[index]);
-			
-		}, 100);
-		
+
+	move = (currentPos, destination, ant) => {
+		return new Promise((resolve, reject) => {
+			let reached = { status: false };
+			let dDAUtils = Utils.DDA(currentPos, destination);
+			let intervalId = setInterval(() => {
+				if (reached.status) resolve(intervalId);
+				else {
+					console.log(reached.status);
+					console.log(currentPos, destination);
+					this.takeStep(currentPos, destination, reached, dDAUtils);
+				}
+			}, 100);
+		});
 	};
-	takeStep = (currentPos, destination, dDAUtils, tracker) => {
+	takeStep = (currentPos, destination, reached, dDAUtils) => {
 		if (dDAUtils.steps > 0) {
 			currentPos.x += 5 * dDAUtils.xInc;
 			currentPos.y += 5 * dDAUtils.yInc;
@@ -76,10 +75,10 @@ class Animation {
 			this.render();
 			return;
 		}
-		console.log('status true');
-		tracker.status = true;
+		console.log("status true");
+		reached.status = true;
 	};
-	
+
 	render = () => {
 		let ctx = Utils.ctx;
 		let fullHeight = Utils.canvasHeight();
