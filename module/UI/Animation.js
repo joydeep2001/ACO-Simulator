@@ -1,40 +1,57 @@
 import DrawingTools from "./DrawingTools.js";
-
-class Animation { 
+import Utils from "../Utility/Utils.js";
+class Animation {
 	constructor(appState) {
 		this.appState = appState;
 		this.playing = false;
-
 	}
-	play = ()=> {
-		if(this.playing) {
+	play = () => {
+		if (this.playing) {
 			console.error("Already playing");
 			return;
-		} 
-		this.trackerArr = new Array(this.appState.ants.length).fill(0);
+		}
+		this.trackerArr = new Array(this.appState.ants.length).fill(Promise.resolve(0));
 		this.playing = true;
 		this.controller();
-	}
+	};
 	controller = () => {
-		console.log(this.trackerArr);
-		console.log(this.appState.ants.length);
+		let count = 0;
 		this.trackerArr.forEach((tracker, index) => {
-			console.log(typeof(tracker));
-			if(typeof(tracker) == 'number') {
+			tracker.then(() => {
 				clearInterval(tracker);
 				let ant = this.appState.ants[index];
-				this.trackerArr[index] = this.move(ant);
-			}
+				let currentPos = ant.currentPos;
+				let destination = ant.destination();
+				if (destination == null) {
+					console.log("null");
+					count++;
+				} else {
+					this.trackerArr[index] = this.move(
+						currentPos,
+						destination,
+						ant
+					);
+					console.log("not null");
+				}
+			});
 		});
-	}
+		if (count >= this.appState.ants.length) this.traversalComplete = true;
+		else console.log("count", count);
+	};
 
-	move = (ant) => {
-		let currentPos = ant.currentPos;
-		let destination = ant.destination();
-		console.log('currentPos', currentPos);
-		console.log('destination', destination);
-
-	}
-	
+	move = (currentPos, destination, ant) => {
+		return new Promise((resolve, reject) => {
+			let reached = { status: false };
+			let dDAUtils = Utils.DDA(currentPos, destination);
+			let intervalId = setInterval(() => {
+				if (reached.status) resolve(intervalId);
+				else {
+					console.log(reached.status);
+					console.log(currentPos, destination);
+					this.takeStep(currentPos, destination, reached, dDAUtils);
+				}
+			}, 100);
+		});
+	};
 }
 export default Animation;
