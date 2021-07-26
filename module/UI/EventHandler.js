@@ -1,35 +1,34 @@
 import DrawingTools from "./DrawingTools.js";
+import Animation from "./Animation.js";
+
 class EventHandler {
 	animationPlaying;
 	constructor(appState) {
 		this.appState = appState;
-		this.drawing = new DrawingTools(appState);
+		this.animationPlaying = false;
+		this.animation = new Animation(this.appState);
 	}
 	handleClick = (e) => {
-		const point = {x : e.offsetX, y : e.offsetY};
+		const point = { x: e.offsetX, y: e.offsetY };
 		this.appState.addNewCity(point);
-		this.appState.addNewAnt();
-		this.drawing.drawPoint();
-		if(this.appState.getPointCount() > 1) 
-			this.drawing.drawGraph();
-	}
+		this.appState.addNewAnt(point);
+		DrawingTools.drawCircle(point, 30);
+		//DrawingTools.drawImage(point);
+		DrawingTools.drawFilledCircle(point, 20)
+		if (this.appState.getPointCount() > 1)
+			DrawingTools.drawGraph(this.appState.points);
+	};
 	handlePlay = () => {
-		if(this.animationPlaying) {
-			console.log("animation already playing");
-		}
-		else {
-			console.log("animation started");
-			this.animationPlaying = true;
-		}
-	}
+		this.animation.play();
+	};
 	handlePause = () => {
-		if(this.animationPlaying) {
+		if (this.animationPlaying) {
 			console.log("animation paused");
+
 			this.animationPlaying = false;
+		} else {
+			console.error("animation not playing");
 		}
-		else {
-			console.log("animation not playing");
-		}
-	}
+	};
 }
 export default EventHandler;
