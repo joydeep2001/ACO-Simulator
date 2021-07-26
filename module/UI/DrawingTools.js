@@ -1,8 +1,12 @@
+import Utils from "../Utility/Utils.js";
+
+
 class DrawingTools {
-	static canvas = document.getElementById("simulate");
-	static ctx = this.canvas.getContext("2d");
+	static ctx = Utils.ctx;
 	static drawPoint = (point) => {
-		console.log('point drawn');
+		this.ctx.beginPath();
+		this.ctx.fillRect(point.x, point.y, 5, 5);
+		//this.ctx.fillRect();
 	} 
 	static drawLine = (point1, point2) => {
 		this.ctx.beginPath();
@@ -12,8 +16,13 @@ class DrawingTools {
 	}
 	static drawCircle = (center, radius) => {
 		this.ctx.beginPath();
-		this.ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
+		this.ctx.arc(Math.round(center.x), Math.round(center.y), radius, 0, 2 * Math.PI);
 		this.ctx.stroke();
+	}
+	static drawFilledCircle(center, radius) {
+		this.ctx.beginPath();
+		this.ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
+		this.ctx.fill();
 	}
 	static drawGraph = (allPoints) => {
 		let lastIdx = allPoints.length - 1;
@@ -25,10 +34,10 @@ class DrawingTools {
 	static drawImage = (point) => {
 		console.log(`image added on ${point.x} , ${point.y}`);
 		const image = new Image();
-		image.src = '../images/ant2.png';
+		image.src = '../images/ant4.png';
 		console.log(image);
 		image.onload = () => {
-			this.ctx.drawImage(image, point.x - 25, point.y - 25, 50, 50);
+			this.ctx.drawImage(image, Math.round(point.x) - 25, Math.round(point.y) - 25, 50, 50);
 		}
 		
 	} 
