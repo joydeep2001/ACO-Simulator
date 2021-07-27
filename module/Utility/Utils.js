@@ -3,9 +3,11 @@ class Utils {
 	static ctx = this.canvas.getContext("2d");
 
 	static canvasHeight() {
+		console.log(this.canvas.height);
 		return this.canvas.height;
 	}
 	static canvasWidth() {
+		console.log(this.canvas.width);
 		return this.canvas.width;
 	}
 	static matrix(rows, columns, default_value = 0) {

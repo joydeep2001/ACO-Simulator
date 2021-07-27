@@ -6,16 +6,21 @@ class Animation {
 		this.appState = appState;
 		this.playing = false;
 		this.traversalComplete = false;
+		
+	}
+	trackObj = () => {
+		return {status: true, id: 0};
+
 	}
 	play = () => {
 		if (this.playing) {
-			console.error("Already playing");
+			//console.error("Already playing");
 			return;
 		}
-		this.trackerArr = new Array(this.appState.ants.length).fill(
-			{status: true, id: 0}
-		);
-		console.log("tracker arrat", this.trackerArr);
+		
+		this.trackerArr = new Array(this.appState.ants.length).fill().map(() => this.trackObj());
+
+		//console.log("tracker array", this.trackerArr);
 		this.playing = true;
 		this.controllerId = setInterval(() => {
 			if (this.traversalComplete) {
@@ -23,7 +28,7 @@ class Animation {
 				console.log("traversalComplete");
 				return;
 			}
-			console.log("controller running");
+			//console.log("controller running");
 			this.controller();
 		}, 50);
 	};
@@ -31,15 +36,16 @@ class Animation {
 	controller = () => {
 		let count = 0;
 		this.trackerArr.forEach((tracker, index) => {
-			console.log("tracker status", tracker.status);
-			console.log("index", index);
+			//console.log("tracker array", this.trackerArr);
+			//console.log("tracker status", tracker.status);
+			//console.log("index", index);
 			if (tracker.status) {
 				clearInterval(tracker.id);
 				let ant = this.appState.ants[index];
 				let currentPos = ant.currentPos;
 				let destination = ant.destination();
 				if (destination == null) {
-					console.log("null");
+					//console.log("null");
 					count++;
 				} else {
 					
@@ -48,21 +54,22 @@ class Animation {
 						destination,
 						index
 					);
-					this.trackerArr[index].status = false;
-					console.log("Turned into false", index);
+					tracker.status = false;
+					//console.log(this.trackerArr);
+					//console.log("Turned into false", index);
 				}
 			}
 		});
 
 		if (count >= this.appState.ants.length) this.traversalComplete = true;
-		else console.log("count", count);
+		//else console.log("count", count);
 	};
 	move = (currentPos, destination, index) => {
-		console.log("move invoked", index);
+		//console.log("move invoked", index);
 		let dDAUtils = Utils.DDA(currentPos, destination);
 		this.trackerArr[index].id = setInterval(() => {
-			console.log("index", index);
-			console.log("tracker id", this.trackerArr[index].id);
+			//console.log("index", index);
+			//console.log("tracker id", this.trackerArr[index].id);
 			this.takeStep(currentPos, destination, dDAUtils, this.trackerArr[index]);
 			
 		}, 100);
@@ -76,7 +83,7 @@ class Animation {
 			this.render();
 			return;
 		}
-		console.log('status true');
+		//console.log('status true');
 		tracker.status = true;
 	};
 	
@@ -84,7 +91,7 @@ class Animation {
 		let ctx = Utils.ctx;
 		let fullHeight = Utils.canvasHeight();
 		let fullWidth = Utils.canvasWidth();
-		ctx.clearRect(0, 0, fullHeight, fullWidth);
+		ctx.clearRect(0, 0, fullWidth, fullHeight);
 		let allPoints = Array();
 		this.appState.points.forEach((point, index) => {
 			DrawingTools.drawCircle(point, 30);
