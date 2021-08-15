@@ -5,20 +5,20 @@ class Animation {
 	constructor(appState) {
 		this.appState = appState;
 		this.playing = false;
-		this.traversalComplete = false;
 		
 	}
 	trackObj = () => {
-		return {status: true, id: 0};
-
-	}
+		return { status: true, id: 0 };
+	};
 	play = () => {
 		if (this.playing) {
-			//console.error("Already playing");
+			console.error("Already playing");
 			return;
 		}
-		
-		this.trackerArr = new Array(this.appState.ants.length).fill().map(() => this.trackObj());
+		this.traversalComplete = false;
+		this.trackerArr = new Array(this.appState.ants.length)
+			.fill()
+			.map(() => this.trackObj());
 
 		//console.log("tracker array", this.trackerArr);
 		this.playing = true;
@@ -30,7 +30,7 @@ class Animation {
 			}
 			//console.log("controller running");
 			this.controller();
-		}, 50);
+		}, 25);
 	};
 
 	controller = () => {
@@ -48,12 +48,7 @@ class Animation {
 					//console.log("null");
 					count++;
 				} else {
-					
-					this.move(
-						currentPos,
-						destination,
-						index
-					);
+					this.move(currentPos, destination, index);
 					tracker.status = false;
 					//console.log(this.trackerArr);
 					//console.log("Turned into false", index);
@@ -70,10 +65,13 @@ class Animation {
 		this.trackerArr[index].id = setInterval(() => {
 			//console.log("index", index);
 			//console.log("tracker id", this.trackerArr[index].id);
-			this.takeStep(currentPos, destination, dDAUtils, this.trackerArr[index]);
-			
-		}, 100);
-		
+			this.takeStep(
+				currentPos,
+				destination,
+				dDAUtils,
+				this.trackerArr[index]
+			);
+		}, 50);
 	};
 	takeStep = (currentPos, destination, dDAUtils, tracker) => {
 		if (dDAUtils.steps > 0) {
@@ -86,7 +84,7 @@ class Animation {
 		//console.log('status true');
 		tracker.status = true;
 	};
-	
+
 	render = () => {
 		let ctx = Utils.ctx;
 		let fullHeight = Utils.canvasHeight();
@@ -99,8 +97,8 @@ class Animation {
 				this.appState.ants[index].currentPos,
 				20
 			);
-			allPoints.push(point);
-			if (allPoints.length > 1) DrawingTools.drawGraph(allPoints);
+			//allPoints.push(point);
+			//if (allPoints.length > 1) DrawingTools.drawGraph(allPoints);
 		});
 	};
 }

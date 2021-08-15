@@ -13,12 +13,12 @@ class State {
 	}
 	addNewCity = (point) => {
 		this.points.push(point);
-		console.log('new city added', this.points);
+		//console.log('new city added', this.points);
 	}
 	addNewAnt = (currentPos) => {
 		let {x, y} = currentPos;
 		this.ants.push(new Ant({x, y}, this.points));
-		console.log('new ant added');
+		//console.log('new ant added');
 	}
 	getPointCount = () => {
 		return this.points.length;
