@@ -1,5 +1,5 @@
 import EventHandler from "./module/UI/EventHandler.js";
-import State from ".module/state/State.js";
+import State from "./module/state/State.js";
 import ACO from "./module/Algo/ACO.js";
 const canvas = document.querySelector("#simulate");
 const ctx = canvas.getContext("2d");

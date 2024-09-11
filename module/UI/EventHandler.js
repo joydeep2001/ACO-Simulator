@@ -11,15 +11,15 @@ class EventHandler {
 	handleClick = (e) => {
 		const point = { x: e.offsetX, y: e.offsetY };
 		this.appState.addNewCity(point);
-		this.appState.addNewAnt(point);
+		this.appState.addNewAnt();
 		DrawingTools.drawCircle(point, 30);
 		//DrawingTools.drawImage(point);
 		DrawingTools.drawFilledCircle(point, 20)
 		if (this.appState.getPointCount() > 1)
 			DrawingTools.drawGraph(this.appState.points);
 	};
-	handlePlay = () => {
-		this.animation.play();
+	handlePlay = async() => {
+		await this.animation.play();
 	};
 	handlePause = () => {
 		if (this.animationPlaying) {

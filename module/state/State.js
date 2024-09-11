@@ -15,8 +15,8 @@ class State {
 		this.points.push(point);
 		//console.log('new city added', this.points);
 	}
-	addNewAnt = (currentPos) => {
-		let {x, y} = currentPos;
+	addNewAnt = () => {
+		let {x, y} = this.points[0];
 		this.ants.push(new Ant({x, y}, this.points));
 		//console.log('new ant added');
 	}

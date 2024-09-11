@@ -11,26 +11,30 @@ class Animation {
 		return { status: true, id: 0 };
 	};
 	play = () => {
-		if (this.playing) {
-			console.error("Already playing");
-			return;
-		}
-		this.traversalComplete = false;
-		this.trackerArr = new Array(this.appState.ants.length)
-			.fill()
-			.map(() => this.trackObj());
-
-		//console.log("tracker array", this.trackerArr);
-		this.playing = true;
-		this.controllerId = setInterval(() => {
-			if (this.traversalComplete) {
-				clearInterval(this.controllerId);
-				console.log("traversalComplete");
+		return new Promise((resolve, reject) => {
+			if (this.playing) {
+				console.error("Already playing");
 				return;
 			}
-			//console.log("controller running");
-			this.controller();
-		}, 25);
+			this.traversalComplete = false;
+			this.trackerArr = new Array(this.appState.ants.length)
+				.fill()
+				.map(() => this.trackObj());
+	
+			//console.log("tracker array", this.trackerArr);
+			this.playing = true;
+			this.controllerId = setInterval(() => {
+				if (this.traversalComplete) {
+					clearInterval(this.controllerId);
+					console.log("traversalComplete");
+					resolve();
+					return;
+				}
+				//console.log("controller running");
+				this.controller();
+			}, 25);
+		})
+		
 	};
 
 	controller = () => {
